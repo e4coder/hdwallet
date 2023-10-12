@@ -34,11 +34,17 @@ func TestBip85(t *testing.T) {
 		t.FailNow()
 	}
 
-	childKey, err := wallet.DeriveFromPath("m/83696968'/0'/0'")
+	childKey, err := wallet.DeriveFromPath("m/83696968'/39'/0'/12'/0")
 	if err != nil {
 		t.Log(err)
 		t.FailNow()
 	}
 
 	t.Log(hex.EncodeToString(childKey.Key))
+
+	address, _ := wallet.PublicAddress(childKey)
+
+	t.Log(address)
+
+	t.Fail()
 }

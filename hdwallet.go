@@ -1,8 +1,11 @@
 package hdwallet
 
 import (
+	"crypto/ecdsa"
+
 	"github.com/e4coder/bip85"
 	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/tyler-smith/go-bip32"
 	"github.com/tyler-smith/go-bip39"
 )
@@ -11,6 +14,29 @@ type HDWallet struct {
 	RootKey  *bip32.Key
 	Seed     []byte
 	FromRoot bool
+}
+
+func (hd *HDWallet) ToECDSA(privKey *bip32.Key) (*ecdsa.PrivateKey, error) {
+	return crypto.ToECDSA(privKey.Key)
+}
+
+func (hd *HDWallet) ToECDSAPub(privKey *bip32.Key) (*ecdsa.PublicKey, error) {
+	privateKey, err := hd.ToECDSA(privKey)
+	if err != nil {
+		return nil, err
+	}
+	return &privateKey.PublicKey, nil
+}
+
+func (hd *HDWallet) PublicAddress(privKey *bip32.Key) (string, error) {
+	publicKeyECDSA, err := hd.ToECDSAPub(privKey)
+	if err != nil {
+		return "", err
+	}
+
+	address := crypto.PubkeyToAddress(*publicKeyECDSA).Hex()
+
+	return address, nil
 }
 
 func (hd *HDWallet) DeriveMnemonic(path []uint32) (string, error) {

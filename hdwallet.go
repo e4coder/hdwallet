@@ -1,6 +1,7 @@
 package hdwallet
 
 import (
+	"github.com/e4coder/bip85"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/tyler-smith/go-bip32"
 	"github.com/tyler-smith/go-bip39"
@@ -10,6 +11,20 @@ type HDWallet struct {
 	RootKey  *bip32.Key
 	Seed     []byte
 	FromRoot bool
+}
+
+func (hd *HDWallet) DeriveMnemonic(path []uint32) (string, error) {
+	key, err := hd.Derive(path)
+	if err != nil {
+		return "", err
+	}
+
+	entropy, err := bip85.EntropyFromKey(key)
+	if err != nil {
+		return "", err
+	}
+
+	return bip85.NewBip39FromEntropy(entropy)
 }
 
 func (hd *HDWallet) Derive(path []uint32) (*bip32.Key, error) {

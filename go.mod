@@ -17,6 +17,7 @@ require (
 	github.com/consensys/gnark-crypto v0.10.0 // indirect
 	github.com/crate-crypto/go-kzg-4844 v0.3.0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1 // indirect
+	github.com/e4coder/bip85 v0.0.0-20231011151009-62f0ca5f866d
 	github.com/ethereum/c-kzg-4844 v0.3.1 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/holiman/uint256 v1.2.3 // indirect
